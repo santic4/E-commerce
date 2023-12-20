@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { Carrito } from '../models/carritoSchema.js'
-import { Product } from '../models/productsSchema.js'
+import { Carrito } from '../../models/carritoSchema.js'
+import { Product } from '../../models/productsSchema.js'
 
 export const carritoRouter = Router()
 

@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { sesionesRouter } from "./sessionesRouter.js";
+import { usuariosRouter } from "./usuariosRouter.js";
 
 export const webRouter = Router()
 
@@ -13,3 +15,6 @@ webRouter.get('/carrito', (req, res) => {
 webRouter.get ('/', (req, res) => {
     res.render ('index', {titulo: 'CoderHouse - Backend - Preentrega II'})
 })
+
+webRouter.use(sesionesRouter)
+webRouter.use(usuariosRouter)

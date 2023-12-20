@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { Product } from '../models/productsSchema.js'
+import { Product } from '../../models/productsSchema.js'
 
 export const productsRouter = Router()
                    
@@ -9,7 +9,8 @@ productsRouter.get('/', async (req, res) => {
         const options = {
             page: req.query.page || 1,
             limit: req.query.quantityItemsPage || 10,
-            sort: req.query.order ? { 'price': req.query.order } : {}
+            sort: req.query.order ? { 'price': req.query.order } : {},
+            lean: true
         };
 
         const filter = req.query.filter ? { category: req.query.filter } : {};
