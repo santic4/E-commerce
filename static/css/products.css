@@ -5,6 +5,17 @@ body {
     padding: 0;
 }
 
+* {
+    box-sizing: border-box;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    gap: 1em;
+  }
+
 .container {
     max-width: 800px;
     margin: 20px auto;
@@ -92,4 +103,25 @@ th, td {
 
 .page-link:hover {
     background-color: #0056b3;
+}
+
+.action-button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.delete-button {
+    color: #ff0000;
+    border-color: #ff0000;
+}
+
+.update-button {
+    color: #007bff;
+    border-color: #007bff;
 }

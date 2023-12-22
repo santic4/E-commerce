@@ -1,9 +1,9 @@
-import { randomUUID } from 'crypto'
 import { Schema, model } from 'mongoose'
 import mongoosePaginate from 'mongoose-paginate-v2'
+import { randomUUID }from 'crypto'
 
 const schemaProduct = new Schema ({
-    _id: { type: String, default: randomUUID},
+    _id: { type: String, default: randomUUID() },
     title: { type: String, require: true },
     description: { type: String, require: true },
     code: { type: String, require: true },
