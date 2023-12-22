@@ -1,13 +1,17 @@
-import { Router } from 'express'
+import { Router, json, urlencoded } from 'express'
 import { Carrito } from '../../models/carritoSchema.js'
 import { Product } from '../../models/productsSchema.js'
 
 export const carritoRouter = Router()
 
+carritoRouter.use(json())
+carritoRouter.use(urlencoded({ extended: true }))
+
 // GET /carrito/
 carritoRouter.get('/', async (req, res) => { // Devuelve todos los carritos y ademas el detalle de los productos dentro de dicho carrito
 
     const carritos = await Carrito.find().populate('carrito.productID')
+    console.log(carritos)
     res.json(carritos)
 })
 
@@ -73,26 +77,32 @@ carritoRouter.get('/:cid', async (req, res) => {
 // POST /carrito/
 carritoRouter.post('/', async (req, res) => {
     try {
-        const newCarrito = await Carrito.create(req.body)
+        const newCarrito = await Carrito.create(req.params)
         res.status(201).json(newCarrito)
     } catch (error) {
         res.status(401).json({ message: error.message })
     }
 })
 
+// Actualizar la cantidad
+
 // PUT /carrito/:cid/product/:pid
 carritoRouter.put('/:cid/product/:pid', async (req, res) => {
+    console.log(req.body)
     const cant = req.body.cant;
 
     const producto = await Carrito.findByIdAndUpdate(
         req.params.cid, 
         { $set: { "carrito.$[elem].cant": cant }},  // Actualiza la cantidad del producto específico
-        { arrayFilters: [{ "elem._id": req.params.pid }]},  // Filtra el array de carrito para encontrar el producto por su ID
-        { new: true } 
+       
+        { new: true,
+          arrayFilters: [{ "elem._id": req.params.pid }] } 
     );
 
     res.status(201).json({ message: 'Producto Actualizado', info: producto });
 });
+
+// Agregar un producto
 
 // PUT /carrito/:cid/add/:pid
 carritoRouter.put('/:cid/add/:pid', async (req, res) => {
@@ -181,7 +191,7 @@ carritoRouter.delete('/:cid/product/:pid', async (req, res) => {
             { new: true }
         )
         
-        res.status(200).json( {message: 'Carrito eliminado exitosamente', info: deletedProd})
+        res.status(200).json( {message: 'Producto eliminado exitosamente', info: deletedProd})
 
     }catch(err){
         res.status(500).json({ error: err.message });

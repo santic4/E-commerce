@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { usuariosManager } from '../../models/userSchema.js'
+import { hashedCompare } from '../../utils/cryptografia.js'
 
 export const sesionesRouter = Router()
 
@@ -13,6 +14,7 @@ sesionesRouter.get('/login', function loginView(req, res) {
 
 sesionesRouter.post('/login', async (req, res) => {
   try {
+
     const { email, password } = req.body
 
     let datosUsuario
@@ -25,6 +27,7 @@ sesionesRouter.post('/login', async (req, res) => {
         rol: 'admin'
       }
     } else {
+
       const usuario = await usuariosManager.findOne({ email }).lean()
 
       if (!usuario) {
@@ -32,7 +35,7 @@ sesionesRouter.post('/login', async (req, res) => {
       }
 
       // deberia encriptar la recibida y comparar con la guardada que ya esta encriptada
-      if (password !== usuario.password) {
+      if (hashedCompare(password, usuario.password) ){
         return res.redirect('/login')
       }
 
