@@ -3,6 +3,9 @@ const rutaFetchNewCarrito = 'http://localhost:8080/api/carrito/';
 
 document.getElementById('newCarrito').addEventListener('click', newCarrito);
 
+
+loadCarritos();
+
 function loadCarritos() {
     fetch(rutaFetch)
         .then(resp => {
@@ -13,6 +16,7 @@ function loadCarritos() {
             return resp.json();
         })
         .then(data => {
+            console.log(`${data} aca esta la data`)
             const targetDOM = document.getElementById('listaCarritos');
             targetDOM.addEventListener('click', selectCarrito);
             targetDOM.innerHTML = '';
@@ -44,7 +48,6 @@ function loadCarritos() {
         });
 }
 
-loadCarritos();
 
 function selectCarrito(e) {
     if (e.target.id !== '') {

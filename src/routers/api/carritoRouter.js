@@ -10,60 +10,61 @@ carritoRouter.use(urlencoded({ extended: true }))
 // GET /carrito/
 carritoRouter.get('/', async (req, res) => { // Devuelve todos los carritos y ademas el detalle de los productos dentro de dicho carrito
 
-    const carritos = await Carrito.find().populate('carrito.productID')
+    const carritos = await Carrito.find({}).populate('carrito.productID')
     console.log(carritos)
     res.json(carritos)
 })
 
-// GET /carrito/carritoOn/
 carritoRouter.get('/carritoOn', async (req, res) => {
     try {
-        const carritos = await Carrito.aggregate([
-            // Filtra los carritos con estado igual a true
+        const carritos = await Carrito
+        .find({}, {'products._id': 0})
+        .populate('carrito.productID')
+       
+        console.log("Resultado de la agregación:", carritos);
+
+        res.json(carritos);
+    } catch (error) {
+        console.error("Error en la ruta /carrito/carritoOn:", error);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+/* const carritos = await Carrito.aggregate([
             { $match: { "status": true } },
-            // Descompone el array carrito para tratar cada elemento por separado
             { $unwind: "$carrito" },
-            // Realiza una unión con la colección "products" para obtener datos del producto
             {
                 $lookup: {
-                    from: "products", // Indica la colección con la que se va a realizar la unión
-                    localField: "carrito.productID", // Campo en el documento actual para la unión
-                    foreignField: "_id", // Campo en la colección externa ("products") para la unión
-                    as: 'dataProduct' // Nuevo campo creado que contiene los datos del producto
+                    from: "products",
+                    localField: "carrito.productID",
+                    foreignField: "_id",
+                    as: 'dataProduct'
                 }
             },
-            // Agrega un nuevo campo llamado "total" que contiene el resultado de la multiplicación
+            { $unwind: "$dataProduct" }, // Descomponer el array generado por $lookup
             {
                 $addFields: {
-                    // Verifica si $carrito.cant es un número, de lo contrario, establece 0
                     cant: { $ifNull: ['$carrito.cant', 0] },
-                    // Verifica si $dataProduct.price es un número, de lo contrario, establece 0
                     price: { $ifNull: ['$dataProduct.price', 0] },
                     total: { $multiply: ['$cant', '$price'] }
                 }
             },
-            // Agrupa los resultados por el ID del carrito y suma los totales
             {
                 $group: {
-                    _id: "$_id", // Agrupa por el ID del carrito
-                    totalCarrito: { $sum: "$total" } // Suma los totales calculados
+                    _id: "$_id",
+                    totalCarrito: { $sum: "$total" }
                 }
             },
-            // Proyecta solo los campos necesarios en la salida
             {
-                // La notación 1 en el objeto de proyección indica que se debe incluir ese campo en la salida, mientras que 0 indicaría que se debe excluir.
                 $project: {
-                    _id: 1, // Incluye el ID del carrito en la salida
-                    totalCarrito: 1 // Incluye el total del carrito en la salida
+                    _id: 1,
+                    totalCarrito: 1
                 }
-            }
-        ]);
+            },
+            { $limit: 1000 }
+        ]);*/
 
-        res.json(carritos);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
+
 
 // GET /carrito/:pid/
 carritoRouter.get('/:cid', async (req, res) => {
@@ -90,19 +91,37 @@ carritoRouter.post('/', async (req, res) => {
 carritoRouter.put('/:cid/product/:pid', async (req, res) => {
     console.log(req.body)
     const cant = req.body.cant;
+    const cid = req.params.cid
+    const pid = req.params.pid
 
+    const carrito = await Carrito.findById(cid)
+
+    if(!carrito){
+        console.log('carrito no existe')
+    }
+
+    const producto = await Product.findById(pid)
+
+    if(!producto){
+        console.log('producto no existe')
+    }
+   
+
+    carrito.upsertProd(pid, cant )
+
+
+    res.status(201).json({ message: 'Producto Actualizado', info: producto });
+});
+
+ /*
     const producto = await Carrito.findByIdAndUpdate(
         req.params.cid, 
         { $set: { "carrito.$[elem].cant": cant }},  // Actualiza la cantidad del producto específico
        
         { new: true,
           arrayFilters: [{ "elem._id": req.params.pid }] } 
-    );
+    );*/
 
-    res.status(201).json({ message: 'Producto Actualizado', info: producto });
-});
-
-// Agregar un producto
 
 // PUT /carrito/:cid/add/:pid
 carritoRouter.put('/:cid/add/:pid', async (req, res) => {
@@ -168,35 +187,31 @@ carritoRouter.delete('/:cid', async (req, res) => {
 // DELETE /carrito/:cid/product/:pid
 carritoRouter.delete('/:cid/product/:pid', async (req, res) => {
     const idCarrito = req.params.cid;
-    const idProduct = req.params.pid; 
+    const idProduct = req.params.pid;
 
-    try{
-        const findedCart = await Carrito.findById(idCarrito)
+    try {
+        const findedCart = await Carrito.findById(idCarrito);
 
-        if(!findedCart){
-            res.status(404).json( { message: 'Carrito no encontrado.' } )
-            return
+        if (!findedCart) {
+            res.status(404).json({ message: 'Carrito no encontrado.' });
+            return;
         }
 
-        const findedPro = await Product.findById(idProduct)
-
-        if(!findedPro){
-            res.status(404).json( { message: 'Producto no encontrado.' } )
-            return
-        }
+        console.log(idCarrito + ' hola ' + idProduct + ' hola');
 
         const deletedProd = await Carrito.findByIdAndUpdate(
-            req.params.cid,
+            idCarrito,
             { $pull: { carrito: { _id: idProduct } } },
             { new: true }
-        )
-        
-        res.status(200).json( {message: 'Producto eliminado exitosamente', info: deletedProd})
+        );
 
-    }catch(err){
+        if (!deletedProd) {
+            res.status(404).json({ message: 'Producto no encontrado en el carrito.' });
+            return;
+        }
+
+        res.status(200).json({ message: 'Producto eliminado exitosamente', info: deletedProd });
+    } catch (err) {
         res.status(500).json({ error: err.message });
     }
-
-})
-
-
+});
