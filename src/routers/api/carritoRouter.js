@@ -68,12 +68,19 @@ carritoRouter.get('/carritoOn', async (req, res) => {
 
 // GET /carrito/:pid/
 carritoRouter.get('/:cid', async (req, res) => {
-    const idCarrito = await Carrito.findById(req.params.cid).populate('carrito.productID') // populate para obtener todo el objeto.
-    if (!idCarrito) {
-        return res.status(404).json({ message: 'El carrito buscado no existe en la base de datos' })
+    try {
+        const idCarritoSelec = await Carrito.findById(req.params.cid).populate('carrito.productID');
+        if (!idCarritoSelec) {
+            return res.status(404).json({ message: 'El carrito buscado no existe en la base de datos' });
+        }
+
+        // Devuelve la respuesta como JSON
+        res.json(idCarritoSelec);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error en el servidor' });
     }
-    res.json(idCarrito)
-})
+});
 
 // POST /carrito/
 carritoRouter.post('/', async (req, res) => {
@@ -89,41 +96,26 @@ carritoRouter.post('/', async (req, res) => {
 
 // PUT /carrito/:cid/product/:pid
 carritoRouter.put('/:cid/product/:pid', async (req, res) => {
-    console.log(req.body)
-    const cant = req.body.cant;
-    const cid = req.params.cid
-    const pid = req.params.pid
-
-    const carrito = await Carrito.findById(cid)
-
-    if(!carrito){
-        console.log('carrito no existe')
+    try {
+      const carrito = await Carrito.findById(req.params.cid);
+  
+      if (!carrito) {
+        return res.status(404).json({ message: 'El carrito buscado no existe en la base de datos' });
+      }
+  
+      const { pid } = req.params;
+      const { cant } = req.body; // Asumiendo que la cantidad se pasa en el cuerpo de la solicitud
+  
+      await carrito.upsertProd(pid, cant);
+  
+      // Devuelve la respuesta como JSON
+      res.json(carrito);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error en el servidor' });
     }
+  });
 
-    const producto = await Product.findById(pid)
-
-    if(!producto){
-        console.log('producto no existe')
-    }
-   
-
-    carrito.upsertProd(pid, cant )
-
-<<<<<<< HEAD
-=======
-    const producto = await Carrito.findByIdAndUpdate(
-        req.params.cid, 
-        { $set: { "carrito.$[elem].cant": cant }},  // Actualiza la cantidad del producto específico
-       
-        { new: true,
-          arrayFilters: [{ "elem._id": req.params.pid }] } 
-    );
->>>>>>> 4ed09a35ca68d0667148746cf7748d60db728323
-
-    res.status(201).json({ message: 'Producto Actualizado', info: producto });
-});
-
-<<<<<<< HEAD
  /*
     const producto = await Carrito.findByIdAndUpdate(
         req.params.cid, 
@@ -133,9 +125,6 @@ carritoRouter.put('/:cid/product/:pid', async (req, res) => {
           arrayFilters: [{ "elem._id": req.params.pid }] } 
     );*/
 
-=======
-// Agregar un producto
->>>>>>> 4ed09a35ca68d0667148746cf7748d60db728323
 
 // PUT /carrito/:cid/add/:pid
 carritoRouter.put('/:cid/add/:pid', async (req, res) => {
@@ -217,13 +206,7 @@ carritoRouter.delete('/:cid/product/:pid', async (req, res) => {
             idCarrito,
             { $pull: { carrito: { _id: idProduct } } },
             { new: true }
-<<<<<<< HEAD
         );
-=======
-        )
-        
-        res.status(200).json( {message: 'Producto eliminado exitosamente', info: deletedProd})
->>>>>>> 4ed09a35ca68d0667148746cf7748d60db728323
 
         if (!deletedProd) {
             res.status(404).json({ message: 'Producto no encontrado en el carrito.' });

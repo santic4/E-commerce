@@ -1,10 +1,8 @@
-const storage = JSON.parse(localStorage.getItem('carrito'));
-const idCarrito = storage._id
+const idCarrito = JSON.parse(localStorage.getItem('carrito'));
 const rutaFetch = 'http://localhost:8080/api/carrito/';
 
 document.getElementById('delCarrito').addEventListener('click', deleteCart);
 
-<<<<<<< HEAD
 console.log(idCarrito);
 
 function getCarritoInfo() {
@@ -12,7 +10,6 @@ function getCarritoInfo() {
   const targetDOM = document.getElementById('listaProductos');
   targetDOM.innerHTML = '';
   targetDOM.addEventListener('click', botonera);
-
 
   fetch(rutaFetch + idCarrito)
     .then((resp) => {
@@ -22,156 +19,88 @@ function getCarritoInfo() {
       return resp.json();
     })
     .then((data) => {
+      console.log(`aca esta la data : ${data}`);
       for (const elem of data.carrito) {
         const newElement = document.createElement('tr');
         newElement.innerHTML = `
-=======
-console.log(idCarrito)
-
-function getCarritoInfo() {
-
-    document.getElementById('carritoID').innerText = `Carrito ID ${idCarrito}`;
-    const targetDOM = document.getElementById('listaProductos');
-    targetDOM.innerHTML = '';
-    targetDOM.addEventListener('click', botonera);
-
-    fetch(rutaFetch + idCarrito)
-        .then(resp => {
-            if (!resp.ok) {
-                throw new Error(`Error en la solicitud. Código de estado: ${resp.status}`);
-            }
-            return resp.json();
-        })
-        .then(data => {
-            for (const elem of data.carrito) {
-                const newElement = document.createElement('tr');
-                newElement.innerHTML = `
->>>>>>> 4ed09a35ca68d0667148746cf7748d60db728323
-                    <th scope="row" style="vertical-align: middle;">${elem.productID.title}</th>
-                    <td style="vertical-align: middle;">${elem.productID.description}</td>
-                    <td style="vertical-align: middle;">${elem.productID.category}</td>
-                    <td style="vertical-align: middle;">${elem.productID.title}</td>
-                    <td style="vertical-align: middle;text-align: center;">${elem.cant}</td>
-                    <td>
-<<<<<<< HEAD
-                        <button type="button" id="del${elem._id}" class="action-button" data-action="delete" data-id="${elem._id}">
-                            Eliminar
-=======
-                        <button type="button" id="del${elem._id}" class="action-button" data-action="delete">
-                            Eliminar
-                        </button>
-                        <button type="button" id="upd${elem._id}" class="action-button" data-action="update">
-                            Actualizar
->>>>>>> 4ed09a35ca68d0667148746cf7748d60db728323
-                        </button>
-                        <button type="button" id="upd${elem._id}" class="action-button" data-action="update" data-id="${elem._id}">
-                        Actualizar
-                    </button>
-                    </td>
-                `;
-<<<<<<< HEAD
+          <th scope="row" style="vertical-align: middle;">${elem.productID.title}</th>
+          <td style="vertical-align: middle;">${elem.productID.description}</td>
+          <td style="vertical-align: middle;">${elem.productID.category}</td>
+          <td style="vertical-align: middle;">${elem.productID.title}</td>
+          <td style="vertical-align: middle;text-align: center;">${elem.cant}</td>
+          <td>
+            <button type="button" id="del${elem.productID._id}" class="action-button" data-action="delete" data-id="${elem.productID._id}">
+              Eliminar
+            </button>
+            <button type="button" id="upd${elem.productID._id}" class="action-button" data-action="update" data-id="${elem.productID._id}">
+              Actualizar
+            </button>
+          </td>
+        `;
         targetDOM.appendChild(newElement);
       }
     })
     .catch((error) => {
       console.error('Error en la solicitud:', error);
     });
-=======
-                targetDOM.appendChild(newElement);
-            }
-        })
-        .catch(error => {
-            console.error('Error en la solicitud:', error);
-        });
->>>>>>> 4ed09a35ca68d0667148746cf7748d60db728323
 }
 
 getCarritoInfo();
 
 function botonera(e) {
-    const target = e.target.closest('.action-button');
-    if (!target) return;
-<<<<<<< HEAD
-  
-    const idProduct = target.dataset.id; // Obtener el ID del producto directamente desde el atributo de datos
-  
-    if (idProduct === undefined) {
-      console.error('ID del producto indefinido. No se puede procesar la eliminación.');
-      return;
-    }
-  
-    const action = target.getAttribute('data-action');
-  
-    if (action === 'delete') {
-      const rutaDelete = rutaFetch + idCarrito + '/product/' + idProduct;
-      fetch(rutaDelete, {
-        method: 'DELETE',
-      })
-        .then((resp) => {
-          if (!resp.ok) {
-            throw new Error(`Error al eliminar el producto. Código de estado: ${resp.status}`);
-          }
-          return resp.json();
-        })
-        .then((data) => {
-          getCarritoInfo();
-        })
-        .catch((error) => {
-          console.error('Error al procesar la eliminación:', error);
-        });
-    } else if (action === 'update') {
-      renderEditFilds(target, idProduct);
-    }
+  const target = e.target.closest('.action-button');
+  if (!target) return;
+
+  console.log(`target: ${target}`);
+
+  // Captura el idProduct desde data-id o el atributo data-id del botón
+  const idProduct = target.dataset.id || target.getAttribute('data-id');
+  console.log(`idProduct: ${idProduct}`);
+
+  if (idProduct === undefined) {
+    console.error('ID del producto indefinido. No se puede procesar la eliminación.');
+    return;
   }
-  
-  function renderEditFilds(target, id) {
-=======
 
-    const selectedId = target.id;
-    const action = target.getAttribute('data-action');
-    const id = selectedId.substring(3);
+  const action = target.getAttribute('data-action');
 
-    if (action === 'delete') {
-        const rutaDelete = rutaFetch + idCarrito + '/product/' + id;
-        fetch(rutaDelete, {
-            method: 'DELETE'
-        })
-            .then(resp => {
-                if (!resp.ok) {
-                    throw new Error(`Error al eliminar el producto. Código de estado: ${resp.status}`);
-                }
-                return resp.json();
-            })
-            .then(data => {
-                getCarritoInfo();
-            })
-            .catch(error => {
-                console.error('Error al procesar la eliminación:', error);
-            });
-    } else if (action === 'update') {
-        renderEditFilds(target, id);
-    }
+  if (action === 'delete') {
+    const rutaDelete = rutaFetch + idCarrito + '/product/' + idProduct;
+    fetch(rutaDelete, {
+      method: 'DELETE',
+    })
+      .then((resp) => {
+        if (!resp.ok) {
+          throw new Error(`Error al eliminar el producto. Código de estado: ${resp.status}`);
+        }
+        return resp.json();
+      })
+      .then((data) => {
+        getCarritoInfo();
+      })
+      .catch((error) => {
+        console.error('Error al procesar la eliminación:', error);
+      });
+  } else if (action === 'update') {
+    renderEditFilds(target, idProduct);
+  }
 }
-
-function renderEditFilds(target, id) {
->>>>>>> 4ed09a35ca68d0667148746cf7748d60db728323
+  
+  function renderEditFilds(target, idProduct) {
     const value = target.parentElement.previousElementSibling.innerText;
     target.parentElement.previousElementSibling.innerHTML = `
-        <input type="text" aria-label="Username" aria-describedby="basic-addon1" id='edit${id}' value="${value}">
+        <input type="text" aria-label="Username" aria-describedby="basic-addon1" id='edit${idProduct}' value="${value}">
     `;
     target.innerHTML = `
-<<<<<<< HEAD
-        <button type="button" class="action-button save-button" data-action="save" data-id="${id}">
-=======
-        <button type="button" class="action-button save-button" data-action="save" id="sav${id}">
->>>>>>> 4ed09a35ca68d0667148746cf7748d60db728323
+        <button type="button" class="action-button save-button" data-action="save" data-id="${idProduct}">
             Guardar
         </button>
     `;
   
     // Agregar event listener al botón de guardar
     const saveButton = target.querySelector('.save-button');
-    saveButton.addEventListener('click', () => handleSaveButtonClick(id));
+    saveButton.addEventListener('click', () => handleSaveButtonClick(idProduct));
+    
   }
   
   function handleSaveButtonClick(id) {
@@ -179,6 +108,8 @@ function renderEditFilds(target, id) {
     const newValue = document.getElementById(`edit${id}`).value;
   
     // Construye la URL de actualización
+    console.log(`este es el  id ${id}`)
+    console.log(`este es el  newValue ${newValue}`)
     const rutaUpdate = `${rutaFetch}${idCarrito}/product/${id}`;
   
     // Realiza la petición PUT con la nueva cantidad
@@ -191,7 +122,6 @@ function renderEditFilds(target, id) {
         cant: newValue,
       }),
     })
-<<<<<<< HEAD
       .then((resp) => {
         if (!resp.ok) {
           throw new Error(`Error al actualizar el producto. Código de estado: ${resp.status}`);
@@ -225,18 +155,3 @@ function deleteCart() {
       console.error('Error al procesar la eliminación del carrito:', error);
     });
 }
-=======
-        .then(resp => {
-            if (!resp.ok) {
-                throw new Error(`Error al eliminar el carrito. Código de estado: ${resp.status}`);
-            }
-            return resp.json();
-        })
-        .then(data => {
-            window.location = '/';
-        })
-        .catch(error => {
-            console.error('Error al procesar la eliminación del carrito:', error);
-        });
-}
->>>>>>> 4ed09a35ca68d0667148746cf7748d60db728323

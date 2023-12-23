@@ -70,6 +70,7 @@ function newCarrito(e) {
         })
         .then(data => {
             const newID = data._id;
+            console.log(`esta es la que me interesa ahora ${newID}`)
 
             // Ahora, debemos enviar la solicitud para obtener el carrito recién creado con sus detalles.
             fetch(`http://localhost:8080/api/carrito/${newID}`)
@@ -81,14 +82,17 @@ function newCarrito(e) {
                     return resp.json();
                 })
                 .then(carritoData => {
+                  
                     // Aquí asumimos que 'carritoData' contiene los detalles del carrito recién creado.
                     // Puedes adaptar esto según la respuesta real del servidor.
-
+                     console.log(`este es el carrito data ${carritoData}`)
                     // Almacenamos el carrito en el almacenamiento local del navegador.
                     localStorage.setItem('carrito', JSON.stringify(carritoData));
+                    
 
                     // Redirigimos a la página de productos.
                     window.location = '/productos';
+                    
                 })
                 .catch(error => {
                     console.error('Error al obtener detalles del nuevo carrito:', error);
