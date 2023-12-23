@@ -109,10 +109,21 @@ carritoRouter.put('/:cid/product/:pid', async (req, res) => {
 
     carrito.upsertProd(pid, cant )
 
+<<<<<<< HEAD
+=======
+    const producto = await Carrito.findByIdAndUpdate(
+        req.params.cid, 
+        { $set: { "carrito.$[elem].cant": cant }},  // Actualiza la cantidad del producto específico
+       
+        { new: true,
+          arrayFilters: [{ "elem._id": req.params.pid }] } 
+    );
+>>>>>>> 4ed09a35ca68d0667148746cf7748d60db728323
 
     res.status(201).json({ message: 'Producto Actualizado', info: producto });
 });
 
+<<<<<<< HEAD
  /*
     const producto = await Carrito.findByIdAndUpdate(
         req.params.cid, 
@@ -122,6 +133,9 @@ carritoRouter.put('/:cid/product/:pid', async (req, res) => {
           arrayFilters: [{ "elem._id": req.params.pid }] } 
     );*/
 
+=======
+// Agregar un producto
+>>>>>>> 4ed09a35ca68d0667148746cf7748d60db728323
 
 // PUT /carrito/:cid/add/:pid
 carritoRouter.put('/:cid/add/:pid', async (req, res) => {
@@ -203,7 +217,13 @@ carritoRouter.delete('/:cid/product/:pid', async (req, res) => {
             idCarrito,
             { $pull: { carrito: { _id: idProduct } } },
             { new: true }
+<<<<<<< HEAD
         );
+=======
+        )
+        
+        res.status(200).json( {message: 'Producto eliminado exitosamente', info: deletedProd})
+>>>>>>> 4ed09a35ca68d0667148746cf7748d60db728323
 
         if (!deletedProd) {
             res.status(404).json({ message: 'Producto no encontrado en el carrito.' });
