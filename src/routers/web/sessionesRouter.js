@@ -8,7 +8,7 @@ export const sesionesRouter = Router()
 
 sesionesRouter.get('/login', function loginView(req, res) {
   res.render('login.handlebars', {
-    pageTitle: 'Login'
+    title: 'Login'
   })
 })
 
@@ -47,8 +47,12 @@ sesionesRouter.post('/login', async (req, res) => {
       }
     }
 
-    req.session['user'] = datosUsuario
-    res.redirect('/profile')
+    req.login(datosUsuario, error =>{
+      if(error){
+          return res.redirect('/login')
+      }
+      res.redirect('/profile')
+   })
   } catch (error) {
     res.redirect('/login')
   }

@@ -8,13 +8,17 @@ getProducts('');
 document.getElementById('applyFilter').addEventListener('click', setFilters);
 
 function getProducts(filtros) {
+    
     fetch(rutaFetch + filtros)
         .then(resp => resp.json())
         .then(data => {
+            console.log('Respuesta del servidor:', data);
+            debugger
             const targetDOM = document.getElementById('contenedorProductos');
             targetDOM.addEventListener('click', addProduct);
             targetDOM.innerHTML = '';
             for (const el of data.payload) {
+                console.log('ELLLL', el, 'YYY DATA',data)
                 const newElement = document.createElement('tr');
                 newElement.innerHTML = `
                     <th scope="row">${el.title}</th>
@@ -178,6 +182,7 @@ function setFilters(e, page) {
         }
     }
     const strFiltro = '?' + optFiltro.join('&');
+    
     getProducts(strFiltro);
 }
 

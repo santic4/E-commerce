@@ -116,20 +116,13 @@ carritoRouter.put('/:cid/product/:pid', async (req, res) => {
     }
   });
 
- /*
-    const producto = await Carrito.findByIdAndUpdate(
-        req.params.cid, 
-        { $set: { "carrito.$[elem].cant": cant }},  // Actualiza la cantidad del producto específico
-       
-        { new: true,
-          arrayFilters: [{ "elem._id": req.params.pid }] } 
-    );*/
 
 
 // PUT /carrito/:cid/add/:pid
 carritoRouter.put('/:cid/add/:pid', async (req, res) => {
 
-    // Comrprueba existencia de carrito buscado
+    try{
+          // Comrprueba existencia de carrito buscado
     const carritoExist = await Carrito.findById(req.params.cid)
 
     if (!carritoExist) {
@@ -146,7 +139,7 @@ carritoRouter.put('/:cid/add/:pid', async (req, res) => {
     if (productExist.length > 0) {
         const updProduct = await Carrito.findByIdAndUpdate(
             req.params.cid,
-            { $inc: { "carrito.$[elem].cant": 1 }},
+            { $set: { "carrito.$[elem].cant": req.body.cant }},
             { arrayFilters: [{ "elem.productID": req.params.pid }]},
             { new: true }
         )
@@ -159,6 +152,12 @@ carritoRouter.put('/:cid/add/:pid', async (req, res) => {
         ).lean()
         res.status(201).json({ message: 'Producto Agregado', info: addProduct })        
     }
+
+    }catch(err){
+        res.status(500).json({ error: err.message });
+    }
+
+  
 })
 
 // Eliminar un Producto del carrito 

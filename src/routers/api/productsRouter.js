@@ -4,37 +4,36 @@ import { Product } from '../../models/productsSchema.js'
 export const productsRouter = Router()
                    
 // GET /products?filter=valor&quantityItemsPage=10&page=1&order=asc
+
 productsRouter.get('/', async (req, res) => {
     try {
-        const options = {
-            page: req.query.page || 1,
-            limit: req.query.quantityItemsPage || 10,
-            sort: req.query.order ? { 'price': req.query.order } : {},
-            lean: true
-        };
-
-        const filter = req.query.filter ? { category: req.query.filter } : {};
-
-        const paginado = await Product.paginate(filter, options);
-
-        const resoults = {
-            status: 'success',
-            payload: paginado.docs,
-            totalPages: paginado.totalPages,
-            prevPage: paginado.prevPage,
-            nextPage: paginado.nextPage,
-            page: paginado.page,
-            hasPrevPage: paginado.hasPrevPage,
-            hasNextPage: paginado.hasNextPage,
-            prevLink: '',
-            nextLink: ''
-        };
-
-        res.json(resoults);
+      const options = {
+        page: req.query.page || 1,
+        limit: req.query.itemsPorPagina || 10, // Cambié el nombre según el frontend
+        sort: req.query.order ? { 'price': req.query.order } : {},
+        lean: true,
+      };
+  
+      const filter = req.query.filtro ? { category: req.query.filtro } : {}; // Cambié el nombre según el frontend
+  
+      const paginado = await Product.paginate(filter, options);
+  
+      const results = {
+        status: 'success',
+        payload: paginado.docs,
+        totalPages: paginado.totalPages,
+        prevPage: paginado.prevPage,
+        nextPage: paginado.nextPage,
+        page: paginado.page,
+        hasPrevPage: paginado.hasPrevPage,
+        hasNextPage: paginado.hasNextPage,
+      };
+  
+      res.json(results);
     } catch (error) {
-        res.status(500).json({ status: 'error', message: 'Error al paginar productos' });
+      res.status(500).json({ status: 'error', message: 'Error al paginar productos' });
     }
-});
+  });
 
 // GET /products/category/
 productsRouter.get('/category/', async (req, res) => {

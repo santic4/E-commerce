@@ -5,6 +5,7 @@ import { apiRouter } from './routers/api/apiRouter.js'
 import { webRouter } from './routers/web/webRouter.js'
 import { engine } from 'express-handlebars'
 import { sesiones } from './middlewares/sesiones.js'
+import { autenticacion } from './middlewares/passport.js'
 
 const app = express()
 app.use(express.urlencoded({ extended: true }))
@@ -19,6 +20,7 @@ app.use(sesiones)
 await connect(MONGODB)
 console.log(`Base de datos conectada en ${MONGODB}`)
 
+app.use(autenticacion)
 
 app.use("/api", apiRouter)
 app.use('/', webRouter)
