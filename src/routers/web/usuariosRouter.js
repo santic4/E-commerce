@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { usuariosManager } from '../../models/userSchema.js';
 import { soloLogueados } from '../../middlewares/sesiones.js';
-
+import passport from 'passport';
 
 export const usuariosRouter = Router();
 
@@ -13,23 +13,13 @@ usuariosRouter.get('/register', function registerView(req, res) {
 });
 
 usuariosRouter.post('/register',
-  async function (req, res, next) {
-    try {
-      if (!req.body || !req.body.password) {
-        throw new Error('Invalid request body or password missing');
-      }
-
-      await usuariosManager.registrarUsuario(req, res, next);
-    } catch (error) {
-      console.error(error);
-      return res.redirect('/register');
-    }
-  },
+  passport.authenticate('register', {
+    failureRedirect: '/register',
+  }),
   function (req, res) {
     res.redirect('/profile');
   }
 );
-
 // Perfil
 usuariosRouter.get('/profile', soloLogueados, function profileView(req, res) {
   res.render('profile.handlebars', {

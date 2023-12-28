@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { usuariosManager } from '../../models/userSchema.js';
-
+import passport from 'passport';
 
 export const sesionesRouter = Router();
 
@@ -12,22 +11,7 @@ sesionesRouter.get('/login', function loginView(req, res) {
 });
 
 sesionesRouter.post('/login',
-  async function (req, res, next) {
-    const { email, password } = req.body;
-
-    try {
-      const datosUsuario = await usuariosManager.auth(email, password);
-      req.login(datosUsuario, error => {
-        if (error) {
-          return res.redirect('/login');
-        }
-        next();
-      });
-    } catch (error) {
-      console.error(error);
-      return res.redirect('/login');
-    }
-  },
+  passport.authenticate('login', { failureRedirect: '/login' }), // Reemplazo el middleware de registro por esta linea que hace referencia al siguiente codigo
   function (req, res) {
     res.redirect('/profile');
   }

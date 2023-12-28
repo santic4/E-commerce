@@ -18,11 +18,10 @@ const schema = new mongoose.Schema(
   }
 );
 
-schema.statics.registrarUsuario = async function (req, res, next) {
+schema.statics.registrarUsuario = async function (reqBody) {
   try {
-    console.log('REQQQQQQQQ', req.body);
-    req.body.password = hash(req.body.password);
-    const creado = await this.create(req.body);
+    reqBody.password = hash(reqBody.password)
+    const creado = await this.create(reqBody);
 
     const datosUsuario = {
       email: creado.email,
@@ -31,11 +30,9 @@ schema.statics.registrarUsuario = async function (req, res, next) {
       rol: 'usuario',
     };
 
-    console.log('datosUsuario', datosUsuario);
-    next();
+    return datosUsuario
   } catch (error) {
     console.error(error);
-    res.redirect('/register');
   }
 };
 
@@ -71,14 +68,10 @@ schema.statics.auth = async function (email, password) {
       };
     }
 
-    if (!datosUsuario) {
-      throw new Error('User not found.');
-    }
-
     return datosUsuario;
   } catch (error) {
     console.error(error);
-    throw error; // Asegúrate de propagar el error para que se maneje adecuadamente en el controlador
+    throw error;
   }
 };
 
