@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { usuariosManager } from '../../models/userSchema.js'
-import { soloLogueadosApi } from '../../middlewares/sesiones.js'
+import { soloLogueados } from '../../middlewares/sesiones.js'
 
 export const usuariosRouter = Router()
 
@@ -13,7 +13,7 @@ usuariosRouter.post('/', async (req, res) => {
   }
 })
 
-usuariosRouter.get('/current', soloLogueadosApi, async (req, res) => {
+usuariosRouter.get('/current', soloLogueados, async (req, res) => {
   const usuario = await usuariosManager.findOne({ email: req.session['user'].email }, { password: 0 }).lean()
   res.json({ status: 'success', payload: usuario })
 })

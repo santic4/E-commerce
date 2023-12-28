@@ -13,7 +13,7 @@ function getProducts(filtros) {
         .then(resp => resp.json())
         .then(data => {
             console.log('Respuesta del servidor:', data);
-            debugger
+          
             const targetDOM = document.getElementById('contenedorProductos');
             targetDOM.addEventListener('click', addProduct);
             targetDOM.innerHTML = '';
