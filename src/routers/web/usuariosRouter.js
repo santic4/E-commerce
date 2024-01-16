@@ -1,16 +1,16 @@
 import { Router } from 'express';
-import { usuariosManager } from '../../models/userSchema.js';
-import { soloLogueados } from '../../middlewares/sesiones.js';
+
 import passport from 'passport';
 
 export const usuariosRouter = Router();
 
+
 // Registro
-usuariosRouter.get('/register', function registerView(req, res) {
+usuariosRouter.get('/register', (req, res) => {
   res.render('registro.handlebars', {
-    title: 'Registro'
-  });
-});
+    pageTitle: 'Registro'
+  })
+})
 
 usuariosRouter.post('/register',
   passport.authenticate('register', {
@@ -21,12 +21,14 @@ usuariosRouter.post('/register',
   }
 );
 // Perfil
-usuariosRouter.get('/profile', soloLogueados, function profileView(req, res) {
+usuariosRouter.get('/profile', (req, res) => {
   res.render('profile.handlebars', {
-    title: 'Perfil',
+    pageTitle: 'Perfil',
     user: req.user,
-  });
-});
+  })
+})
+
+/*
 
 // Resetear Contraseña
 usuariosRouter.get('/resetpassword', function resetPasswordView(req, res) {
@@ -34,6 +36,8 @@ usuariosRouter.get('/resetpassword', function resetPasswordView(req, res) {
     title: 'Reestablecer contraseña'
   });
 });
+
+
 
 usuariosRouter.post('/resetpassword', async function resetearContraseña(req, res) {
   try {
@@ -44,3 +48,5 @@ usuariosRouter.post('/resetpassword', async function resetearContraseña(req, re
     res.redirect('/resetpassword');
   }
 });
+
+*/

@@ -4,10 +4,16 @@ export const pm_path = './db/products.json'
 
 // MONGO 
 export const MONGODB = "mongodb+srv://santisv4:RomanD10s@cluster0.bhh58fu.mongodb.net/?retryWrites=true&w=majority"
-export const SESSION_SECRET = 'SecretCoder'
 
 // GITHUB Passport
-export const AppId = "757860"
-export const ClientId = "Iv1.1d8f190c4f3301c1"
-export const ClientSecret = "616b2f0a55973e1d9acf8e3cfc4630cd37d27ea68b93a29c-a2d1-4f0a-8821-ad5719c165f0"
-export const CallbackUrl = "http://localhost:8080/callback"
+export const AppId = "794354"
+export const githubClienteId = "Iv1.17795694a22a85c2"
+export const githubClientSecret = "dbcde5318eb9d99d65f73e1ba644c11efdc722aa"
+export const githubCallbackUrl = "http://localhost:8080/api/sesiones/callback"
+
+// SECRETS WORDS
+export const COOKIE_SECRET = 'cookiesecret'
+export const SESSION_SECRET = 'SecretCoder'
+export const JWT_PRIVATE_KEY = 'jwtsecret'
+
+

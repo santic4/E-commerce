@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import passport from 'passport';
 
+
 export const sesionesRouter = Router();
 
 // Login
@@ -23,3 +24,4 @@ sesionesRouter.post('/logout', (req, res) => {
     res.redirect('/login');
   });
 });
+

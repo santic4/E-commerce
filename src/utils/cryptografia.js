@@ -1,21 +1,47 @@
-import { hashSync, compareSync, genSaltSync } from 'bcrypt'
+import { hashSync, compareSync, genSaltSync } from 'bcrypt';
+import jwt from "jsonwebtoken"
+import { JWT_PRIVATE_KEY } from '../config.js';
+// hash
 
-// hashea
-export function hash(ev) {
-    try {
-      return hashSync(ev, genSaltSync(10));
-    } catch (error) {
-      console.error('Error hashing password:', error);
-      throw error; // Puedes manejar el error según tus necesidades
+export function hashear(frase) {
+  if (!frase) throw new Error('invalid data to hash')
+  return hashSync(frase, genSaltSync(10))
+}
+
+export function hasheadasSonIguales({ recibida, almacenada }) {
+  if (!recibida) throw new Error('invalid data to decode')
+  if (!almacenada) throw new Error('invalid data to compare')
+  return compareSync(recibida, almacenada)
+}
+
+// jwt
+
+export function encriptar(data) {
+  return new Promise((resolve, reject) => {
+    if (!data) {
+      return reject(new Error('nothing to jwt encode!'))
     }
-  }
-  
-  // compara
-  export function hashedCompare(recibida, almacenada) {
-    try {
-      return compareSync(recibida, almacenada);
-    } catch (error) {
-      console.error('Error comparing passwords:', error);
-      throw error; // Puedes manejar el error según tus necesidades
+    jwt.sign(data, JWT_PRIVATE_KEY, { expiresIn: '24h' }, (err, encoded) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(encoded)
+      }
+    })
+  })
+}
+
+export function desencriptar(token) {
+  return new Promise((resolve, reject) => {
+    if (!token) {
+      return reject(new Error('no token to decode!'))
     }
-  }
+    jwt.verify(token, JWT_PRIVATE_KEY, (err, decoded) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(decoded)
+      }
+    })
+  })
+}
