@@ -1,47 +1,46 @@
-import passport from 'passport'
-import { appendJwtAsCookie, removeJwtFromCookies } from './authenticationControl.js'
-import { usersOnly } from '../middlewares/authorization.js'
+import passport from 'passport';
+import { appendJwtAsCookie, removeJwtFromCookies } from './authenticationControl.js';
+import { usersOnly } from '../middlewares/authorization.js';
 
 export const loginUser = async (req, res, next) => {
-    try{
-        passport.authenticate('localLogin', {
-            failWithError: true,
-            session: false
-          }),
-          appendJwtAsCookie,
-          async (req, res, next) => {
-            res['successfullPost'](req.user)
-          }
-    }catch(err){
-      next(err)
-    }
-}
+  try {
+    passport.authenticate('localLogin', {
+      failWithError: true,
+      session: false
+    })(req, res, async () => {
+      await appendJwtAsCookie(req, res, () => {
+        res.successfullPost(req.user);
+      });
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const getCurrentSessionUser = async (req, res, next) => {
-    try{
-        passport.authenticate('jwtAuth', {
-            session: false
-          }),
-          usersOnly,
-          async (req, res, next) => {
-            res['successfullGet'](req.user)
-          }
-    }catch(err){
-       next(err)
-    }
-}
+  try {
+    passport.authenticate('jwtAuth', {
+      session: false
+    })(req, res, async () => {
+      await usersOnly(req, res, () => {
+        res.successfullGet(req.user);
+      });
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const logoutSession = async (req, res, next) => {
-    try{
-        removeJwtFromCookies,
-        async (req, res, next) => {
-          res['successfullDelete']()
-        }
-    }catch(err){
-        next(err)
-    }
-}
-
+  try {
+    await removeJwtFromCookies(req, res, () => {
+      res.successfullDelete();
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+/*
 export const githubSession = async (req, res, next) => {
     try{
         passport.authenticate('github-login', { failWithError: true }),
@@ -51,4 +50,4 @@ export const githubSession = async (req, res, next) => {
     }catch(err){
         next(err)
     }
-}
+}*/

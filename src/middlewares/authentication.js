@@ -2,7 +2,7 @@ import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
 import { JWT_PRIVATE_KEY } from '../config.js'
-import { loginUser, registerUser } from '../controllers/authenticationControl.js'
+import { jwtAuthentication, loginUser, registerUser } from '../controllers/authenticationControl.js'
 
 
 passport.use('localRegister', new LocalStrategy(
@@ -25,9 +25,7 @@ passport.use('jwtAuth', new JwtStrategy({
     return token
   }]),
   secretOrKey: JWT_PRIVATE_KEY
-}, (user, done) => {
-  done(null, user)
-}))
+}, jwtAuthentication));
 
 
 passport.serializeUser((user, next) => { next(null, user) })

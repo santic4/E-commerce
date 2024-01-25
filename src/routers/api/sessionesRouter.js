@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { loginUser, getCurrentSessionUser, logoutSession, githubSession } from '../../controllers/sessionsController.js'
+import { loginUser, getCurrentSessionUser, logoutSession } from '../../controllers/sessionsController.js'
 
 export const sessionsRouter = Router()
 
