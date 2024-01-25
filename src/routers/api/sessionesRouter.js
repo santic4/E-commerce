@@ -4,7 +4,7 @@ import { loginUser, getCurrentSessionUser, logoutSession } from '../../controlle
 export const sessionsRouter = Router()
 
 // login
-sessionsRouter.post('/',loginUser)
+sessionsRouter.post('/', loginUser)
 
 // view
 sessionsRouter.get('/current', getCurrentSessionUser)

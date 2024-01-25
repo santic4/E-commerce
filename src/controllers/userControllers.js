@@ -26,8 +26,6 @@ export const getCurrentUser = async (req, res, next) => {
       failWithError: true,
       session: false
     })(req, res, async () => {
-      console.log('req', req)
-      debugger
      
       usersOnly(req, res, () => {
         res['successfullGet'](req.user);
