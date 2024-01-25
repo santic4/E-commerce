@@ -1,3 +1,9 @@
+import { authorizeUser, authorizeAdmin } from '../controllers/authorizationControl.js';
+
+export const usersOnly = authorizeUser;
+export const adminsOnly = authorizeAdmin;
+
+/*
 export function soloLogueadosApi(req, res, next) {
   if (!req.isAuthenticated()) {
     return res.status(400).json({ status: 'error', message: 'necesita iniciar sesion' })
@@ -29,3 +35,4 @@ export async function adminsOnly(req, res, next) {
   }
   next()
 }
+*/

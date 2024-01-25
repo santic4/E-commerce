@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { Product } from '../../models/productsSchema.js'
 
+
 export const productsRouter = Router()
                    
 // GET /products?filter=valor&quantityItemsPage=10&page=1&order=asc

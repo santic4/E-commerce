@@ -2,6 +2,7 @@ import { Router } from "express";
 import { sesionesRouter } from "./sessionesRouter.js";
 import { usuariosRouter } from "./usuariosRouter.js";
 import passport from 'passport'
+import { usersOnly } from "../../middlewares/authorization.js";
 
 export const webRouter = Router()
 

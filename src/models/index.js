@@ -1,1 +1,1 @@
-export { usersManager} from './mongoose/User.js'
+export { usersManager } from './mongoose/User.js'

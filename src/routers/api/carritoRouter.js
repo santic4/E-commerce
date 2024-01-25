@@ -2,6 +2,7 @@ import { Router, json, urlencoded } from 'express'
 import { Carrito } from '../../models/carritoSchema.js'
 import { Product } from '../../models/productsSchema.js'
 
+
 export const carritoRouter = Router()
 
 carritoRouter.use(json())
@@ -15,7 +16,7 @@ carritoRouter.get('/', async (req, res) => { // Devuelve todos los carritos y ad
     res.json(carritos)
 })
 
-carritoRouter.get('/carritoOn', async (req, res) => {
+carritoRouter.get('/carritoOn',  async (req, res) => {
     try {
         const carritos = await Carrito
         .find({}, {'products._id': 0})

@@ -1,34 +1,19 @@
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
-import { usersManager } from '../models/index.js'
-import { encriptar } from '../utils/cryptografia.js'
 import { JWT_PRIVATE_KEY } from '../config.js'
+import { loginUser, registerUser } from '../controllers/authenticationControl.js'
 
-
-const COOKIE_OPTS = { signed: true, maxAge: 1000 * 60 * 60, httpOnly: true }
 
 passport.use('localRegister', new LocalStrategy(
   { passReqToCallback: true },
-  async (req, _username, _password, done) => {
-    try {
-      const user = await usersManager.register(req.body)
-      done(null, user)
-    } catch (error) {
-      done(error)
-    }
-  })
+  registerUser 
+  )
 )
 
 passport.use('localLogin', new LocalStrategy(
-  async (username, password, done) => {
-    try {
-      const user = await usersManager.login({ username, password })
-      done(null, user)
-    } catch (error) {
-      done(error)
-    }
-  })
+  loginUser
+ )
 )
 
 passport.use('jwtAuth', new JwtStrategy({
@@ -43,6 +28,13 @@ passport.use('jwtAuth', new JwtStrategy({
 }, (user, done) => {
   done(null, user)
 }))
+
+
+passport.serializeUser((user, next) => { next(null, user) })
+passport.deserializeUser((user, next) => { next(null, user) })
+
+export const passportInitialize = passport.initialize()
+export const passportSession = passport.session()
 
 /*
 // -------------------------- GIT HUB LOGIN ------------------------------
@@ -82,24 +74,3 @@ passport.use('github-login', new GithubStrategy({
 // --------------------------------------------------------------------------------
 */
 
-
-export async function appendJwtAsCookie(req, res, next) {
-  try {
-    const jwt = await encriptar(req.user)
-    res.cookie('authorization', jwt, COOKIE_OPTS)
-    next()
-  } catch (error) {
-    next(error)
-  }
-}
-
-export async function removeJwtFromCookies(req, res, next) {
-  res.clearCookie('authorization', COOKIE_OPTS)
-  next()
-}
-
-passport.serializeUser((user, next) => { next(null, user) })
-passport.deserializeUser((user, next) => { next(null, user) })
-
-export const passportInitialize = passport.initialize()
-export const passportSession = passport.session()
