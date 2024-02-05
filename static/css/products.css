@@ -125,3 +125,53 @@ th, td {
     color: #007bff;
     border-color: #007bff;
 }
+
+/* Estilos para la barra de navegación */
+nav {
+    background-color: #333;
+    padding: 10px;
+    color: white;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+/* Estilos para el botón de hamburguesa en la barra de navegación */
+button {
+    background: blue;
+    border: none;
+    cursor: pointer;
+}
+
+/* Estilos para el contenedor del chat */
+#chat-container {
+    width: 300px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+/* Estilos para el cuadro de mensajes */
+#chat-box {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+/* Estilos para la entrada de mensajes */
+#message-input {
+    width: 70%;
+    padding: 5px;
+}
+
+/* Estilos para el botón de enviar mensajes */
+#send-button {
+    background-color: #4CAF50;
+    color: rgb(25, 19, 19);
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}

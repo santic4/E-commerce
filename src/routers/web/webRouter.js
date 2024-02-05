@@ -2,10 +2,8 @@ import { Router } from "express";
 import { sesionesRouter } from "./sessionesRouter.js";
 import { usuariosRouter } from "./usuariosRouter.js";
 import passport from 'passport'
-import { usersOnly } from "../../middlewares/authorization.js";
 
 export const webRouter = Router()
-
 
 webRouter.use(sesionesRouter)
 webRouter.use(usuariosRouter)
@@ -22,6 +20,10 @@ webRouter.get('/carrito', (req, res) => {
 webRouter.get ('/', (req, res) => {
     res.render ('index', {titulo: 'CoderHouse - Backend - Preentrega II'})
 })
+
+webRouter.get('/chat', (req, res) => {
+    res.render('chat',{ titulo: 'chat' })
+  })
 
 // Git Hub login
 webRouter.get('/githublogin',
