@@ -1,5 +1,4 @@
 import { ProductDao } from "../dao/productDao.js";
-import { Product } from "../models/productsSchema.js";
 import { ProductService } from "../services/productServices.js";
 
 export const getAllProducts = async (req, res, next) => {

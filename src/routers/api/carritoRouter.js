@@ -12,6 +12,33 @@ carritoRouter.use(urlencoded({ extended: true }))
 
 carritoRouter.get('/carritoOn', getAllCarts);
 
+// GET /carrito/:pid/
+carritoRouter.get('/:cid', getCartId);
+
+// POST /carrito/
+carritoRouter.post('/', postCart)
+
+// Actualizar la cantidad
+
+// PUT /carrito/:cid/product/:pid
+carritoRouter.put('/:cid/product/:pid', updateQuantityProductInCart);
+
+
+// PUT /carrito/:cid/add/:pid
+carritoRouter.put('/:cid/add/:pid', postProductIntoCart)
+
+// Eliminar un Producto del carrito 
+
+// DELETE /carrito/:cid 
+carritoRouter.delete('/:cid', deleteCart)
+
+// DELETE /carrito/:cid/product/:pid
+carritoRouter.delete('/:cid/product/:pid', deleteProdInCart);
+
+
+
+
+
 /* const carritos = await Carrito.aggregate([
             { $match: { "status": true } },
             { $unwind: "$carrito" },
@@ -45,27 +72,3 @@ carritoRouter.get('/carritoOn', getAllCarts);
             },
             { $limit: 1000 }
         ]);*/
-
-
-// GET /carrito/:pid/
-carritoRouter.get('/:cid', getCartId);
-
-// POST /carrito/
-carritoRouter.post('/', postCart)
-
-// Actualizar la cantidad
-
-// PUT /carrito/:cid/product/:pid
-carritoRouter.put('/:cid/product/:pid', updateQuantityProductInCart);
-
-
-// PUT /carrito/:cid/add/:pid
-carritoRouter.put('/:cid/add/:pid', postProductIntoCart)
-
-// Eliminar un Producto del carrito 
-
-// DELETE /carrito/:cid 
-carritoRouter.delete('/:cid', deleteCart)
-
-// DELETE /carrito/:cid/product/:pid
-carritoRouter.delete('/:cid/product/:pid', deleteProdInCart);
