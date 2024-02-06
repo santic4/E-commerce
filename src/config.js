@@ -14,6 +14,13 @@ export const COOKIE_SECRET = process.env.COOKIE_SECRET
 export const SESSION_SECRET = process.env.SESSION_SECRET
 export const JWT_PRIVATE_KEY = process.env.JWT_PRIVATE_KEY
 
+// Nodemailer
+export const EMAIL_USER = process.env.EMAIL_USER
+export const EMAIL_PASS = process.env.EMAIL_PASS
+
+
+
+
 /*
 // Local
 export const PORT = '8080'

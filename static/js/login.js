@@ -18,12 +18,7 @@ formLogin?.addEventListener('submit', async (event) => {
   if (response.status === 201) {
     window.location.href = '/profile'
   } else {
-    Swal.fire({
-      title: "Fallo de inicio",
-      icon: "error",
-      color: "write",
-      text: "Ingresar usuario y contraseña!"
-    });
+    alert('Credenciales incorrectas')
     
   }
 });
