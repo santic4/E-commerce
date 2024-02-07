@@ -1,3 +1,7 @@
+const idCarrito = JSON.parse(localStorage.getItem('carrito'))
+console.log(idCarrito)
+document.getElementById('carritoID').value= idCarrito
+
 // Verificar si el elemento con ID "register" existe
 const formLogin = document.getElementById('register');
 
