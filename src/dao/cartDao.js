@@ -20,7 +20,9 @@ export class CartDao {
         try {
             const idCarritoSelec = await Carrito.findById(carritoID).populate('carrito.productID');
             if (!idCarritoSelec) {
-                return res.status(404).json({ message: 'El carrito buscado no existe en la base de datos' });
+                // res.status(404).json({ message: 'El carrito buscado no existe en la base de datos' });
+                console.log('No se puede encontrar el carrito')
+                return
             }
     
             return idCarritoSelec
@@ -31,6 +33,9 @@ export class CartDao {
 
     static postCart = async (newDataCart) => {
         try {
+            if (!newDataCart.user) {
+                newDataCart.user = 'defaultUser';
+            }
             const newCarrito = await Carrito.create(newDataCart)
 
             return newCarrito
@@ -154,6 +159,14 @@ export class CartDao {
         }
       
       };
+
+    static saveCart = async (cart) => {
+        try {
+          await cart.save();
+        } catch (error) {
+          throw new Error('Error saving cart');
+        }
+      }
 }
 
 /*

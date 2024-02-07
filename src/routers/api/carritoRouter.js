@@ -1,6 +1,5 @@
 import { Router, json, urlencoded } from 'express'
-import { Carrito } from '../../models/carritoSchema.js'
-import { deleteCart, deleteProdInCart, getAllCarts, getCartId, postCart, postProductIntoCart, updateQuantityProductInCart,  } from '../../controllers/cartController.js'
+import { deleteCart, deleteProdInCart, getAllCarts, getCartId, postCart, postProductIntoCart, updateQuantityProductInCart, purchaseCart } from '../../controllers/cartController.js'
 
 
 export const carritoRouter = Router()
@@ -35,6 +34,8 @@ carritoRouter.delete('/:cid', deleteCart)
 // DELETE /carrito/:cid/product/:pid
 carritoRouter.delete('/:cid/product/:pid', deleteProdInCart);
 
+// Comprar
+carritoRouter.post('/:cid/purchase', purchaseCart );
 
 
 

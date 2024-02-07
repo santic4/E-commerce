@@ -1,4 +1,4 @@
-import { usersManager } from "../models/mongoose/User.js";
+import { usersManager } from "../models/index.js";
 import { hashear, hasheadasSonIguales } from "../utils/cryptografia.js";
 
 export class UserDAO {
@@ -12,6 +12,12 @@ export class UserDAO {
           throw new Error('Error creating user');
         }
       };
+
+      static readOne = async (criteria) => {
+        const result = await usersManager.findOne(criteria).lean()
+        if (!result) throw new Error('NOT FOUND')
+        return result
+      }
     
       static findUserByUsername = async ({username, password}) => {
         try {

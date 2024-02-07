@@ -115,3 +115,58 @@ function deleteCart() {
             window.location = '/';
         });
 }
+
+async function buy() {
+    try {
+  
+      const cartId = JSON.parse(localStorage.getItem('carrito'));
+      console.log(cartId);
+      const response = await fetch(`api/carrito/${cartId}/purchase`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        const data = await response.json();
+        if (data && data.error) {
+          throw new Error(`Error en la solicitud: ${data.error}`);
+        } else {
+          throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
+        }
+      }
+      const data = await response.json();
+  
+      if (data) {
+  
+        alert({
+          title: 'Compra exitosa!',
+          text: `ID del ticket: +${data.ticket.code}`,
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = './productos'
+          }
+        });
+        localStorage.removeItem('carrito');
+      } else {
+        const errorMessage = data.failedProducts ? 'Productos no disponibles: ' + data.failedProducts.join(', ') : 'Error desconocido en la compra';
+        alert('Error en la compra. ' + errorMessage);
+      }
+    } catch (error) {
+      console.error('Error en la compra:', error.message);
+      alert('Error en la compra. Consulta la consola para más detalles.');
+    }
+  }
+  
+  async function buyComplete() {
+  
+    try {
+      await buy();
+    } catch (error) {
+      console.error('Error general:', error);
+      alert('Error general en la compra. Consulta la consola para más detalles.');
+    }
+}

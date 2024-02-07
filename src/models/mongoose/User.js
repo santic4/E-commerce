@@ -9,12 +9,20 @@ const schema = new Schema({
   email: { type: String, unique: true, required: true },
   age: { type: String, required: true },
   password: { type: String, required: true },
-  //cart: { type: String, unique: true, required: true },
+  cart: { type: String, unique: true, required: true },
   rol: { type: String, default: 'user' },
-  
+  orders: {
+    type: [
+      {
+        type: String,
+        ref: 'orders'
+      }
+    ],
+    default: []
+  }
 }, {
   versionKey: false,
-  strict: 'throw'
+  strict: 'throw',
 })
 
 export const usersManager = model('users', schema)

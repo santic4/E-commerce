@@ -94,3 +94,17 @@ export const deleteProdInCart = async (req, res, next) => {
         // res.status(500).json({ message: error.message });
     }
 };
+
+// Comprar
+export const purchaseCart = async (req, res, next) => {
+    try {
+      const cartId = req.params.cid; 
+     
+      const result = await CartService.purchaseCart(cartId);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error(error);
+      next(error)
+      // res.status(500).json({ message: error.message });
+    }
+  };

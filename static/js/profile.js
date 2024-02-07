@@ -13,7 +13,8 @@ window.addEventListener('load', async () => {
 
   spans[0].innerHTML = usuario.username
   spans[1].innerHTML = usuario.first_name
-  spans[2].innerHTML = usuario.email
+  spans[2].innerHTML = usuario.last_name
+  spans[3].innerHTML = usuario.email
 
   const ul = document.querySelector('nav ul')
   const liLogout = document.createElement('li')
