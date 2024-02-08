@@ -1,4 +1,4 @@
-import { ProductDao } from "../dao/productDao.js";
+import { productDao } from "../dao/indexDao.js";
 
 export class ProductService {
 
@@ -11,7 +11,7 @@ export class ProductService {
             }
 
             // Luego, creas el producto usando el DAO
-            return await ProductDao.postProduct(newProductData);
+            return await productDao.postProduct(newProductData);
 
         }catch(err){
             throw new Error('Data invalid')

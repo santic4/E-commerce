@@ -48,12 +48,57 @@ loadCarritos();
 
 function selectCarrito(e) {
     if (e.target.id !== '') {
-        document.getElementById('carritosActivos').value = e.target.id;
+        //document.getElementById('carritosActivos').value = e.target.id;
         localStorage.setItem('carrito', JSON.stringify(e.target.id));
         window.location = '/productos';
     }
 }
 
+async function newCarrito(e) {
+
+    try {
+  
+      const res = await fetch('http://localhost:8080/api/sessions/current',
+        {
+          method: 'GET'
+        })
+      if (res.status !== 200) {
+        alert('necesitas loguearte para ver esta info!')
+        return (window.location.href = '/login')
+      }
+  
+      const result = await res.json()
+      const usuario = result.payload
+      const user = usuario.username
+      console.log(user)
+      
+      const response = await fetch('http://localhost:8080/api/carrito', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user: user }),
+      });
+  
+      if (response.ok) {
+        // El mensaje se ha enviado correctamente
+        console.log('Mensaje enviado con éxito');
+  
+        const newID = response._id
+        console.log(newID)
+        localStorage.setItem('carrito', JSON.stringify(newID))
+        window.location = '/productos'
+  
+      } else {
+        console.error('Error al enviar el mensaje:', response.status)
+  
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+    }
+  
+  }
+/*
 function newCarrito(e) {
     fetch(rutaFetchNewCarrito, {
         method: 'POST',
@@ -69,7 +114,6 @@ function newCarrito(e) {
        
             const newID = data._id;
           
-            // Ahora, debemos enviar la solicitud para obtener el carrito recién creado con sus detalles.
             fetch(`http://localhost:8080/api/carrito/${newID}`)
                 .then(resp => {
                     // Verificar si la respuesta es un error 404
@@ -79,22 +123,17 @@ function newCarrito(e) {
                     return resp.json();
                 })
                 .then(carritoData => {
-                    // Aquí asumimos que 'carritoData' contiene los detalles del carrito recién creado.
-                    // Puedes adaptar esto según la respuesta real del servidor.
-
-                    // Almacenamos el carrito en el almacenamiento local del navegador.
+        
                     localStorage.setItem('carrito', JSON.stringify(carritoData._id));
 
-                    // Redirigimos a la página de productos.
                     window.location = '/productos';
                 })
                 .catch(error => {
                     console.error('Error al obtener detalles del nuevo carrito:', error);
-                    // Manejar el error al obtener detalles del carrito según sea necesario.
                 });
         })
         .catch(error => {
             console.error('Error al crear un nuevo carrito:', error);
-            // Manejar el error al crear un nuevo carrito según sea necesario.
         });
 }
+*/

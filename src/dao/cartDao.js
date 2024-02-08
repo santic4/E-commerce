@@ -3,7 +3,7 @@ import { Carrito } from "../models/carritoSchema.js";
 export class CartDao {
 
     // Obtener todos los carritos
-    static getAllCarts = async () => {
+    async getAllCarts() {
         try {
             const carritos = await Carrito
             .find({}, {'products._id': 0})
@@ -16,12 +16,12 @@ export class CartDao {
     
     };
 
-    static getCartId = async (carritoID) => {
+    async getCartId(carritoID) {
         try {
             const idCarritoSelec = await Carrito.findById(carritoID).populate('carrito.productID');
             if (!idCarritoSelec) {
                 // res.status(404).json({ message: 'El carrito buscado no existe en la base de datos' });
-                console.log('No se puede encontrar el carrito')
+                console.log('El carrito buscado no existe en la base de datos.')
                 return
             }
     
@@ -31,12 +31,11 @@ export class CartDao {
         }
     }
 
-    static postCart = async (newDataCart) => {
+    async postCart(newDataCart) {
         try {
-            if (!newDataCart.user) {
-                newDataCart.user = 'defaultUser';
-            }
-            const newCarrito = await Carrito.create(newDataCart)
+            console.log('datacart' + newDataCart)
+            
+            const newCarrito = await Carrito.create({ user: newDataCart.user })
 
             return newCarrito
 
@@ -45,12 +44,13 @@ export class CartDao {
         }
     }
 
-    static updateQuantityProductInCart = async (cid, pid, cant) => {
+    async updateQuantityProductInCart(cid, pid, cant) {
         try {
             const carrito = await Carrito.findById(cid);
         
             if (!carrito) {
-              return res.status(404).json({ message: 'El carrito buscado no existe en la base de datos' });
+              throw new Error('El carrito buscado no existe en la base de datos')
+              return 
             }
         
             await carrito.upsertProd(pid, cant);
@@ -63,13 +63,13 @@ export class CartDao {
           }
     }
 
-    static postProductIntoCart = async (cid, pid) => {
+    async postProductIntoCart(cid, pid) {
         try{
             // Comrprueba existencia de carrito buscado
       const carritoExist = await Carrito.findById(cid)
   
-      if (!carritoExist) {
-          res.json({message: "not found"})
+      if (!carritoExist) {  
+          throw new Error('El carrito no existe')
           return
       }
   
@@ -105,19 +105,19 @@ export class CartDao {
        
       };
 
-    static deleteCart = async (cid) => {
+    async deleteCart(cid) {
         const idCarrito = cid;
 
         try{
             if(!idCarrito){
-                res.status(404).json({ message: 'Carrito no encontrado.' });
+                throw new Error('Carrito no encontrado.')
                 return
             }
         
             const deletedCart = await Carrito.findByIdAndDelete(idCarrito)
     
             if (!deletedCart) {
-                res.status(404).json({ message: 'Carrito no encontrado.' }); 
+                throw new Error('Carrito no encontrado.')
                 return;
             }
     
@@ -129,7 +129,7 @@ export class CartDao {
         
       };
 
-    static deleteProdInCart = async (cid, pid) => {
+    async deleteProdInCart(cid, pid) {
         const idCarrito = cid;
         const idProduct = pid;
     
@@ -137,7 +137,7 @@ export class CartDao {
             const findedCart = await Carrito.findById(idCarrito);
     
             if (!findedCart) {
-                res.status(404).json({ message: 'Carrito no encontrado.' });
+                throw new Error('Carrito no encontrado.')
                 return;
             }
     
@@ -148,7 +148,7 @@ export class CartDao {
             );
     
             if (!deletedProd) {
-                res.status(404).json({ message: 'Producto no encontrado en el carrito.' });
+                throw new Error('Producto no encontrado en el carrito.');
                 return;
             }
     
@@ -160,8 +160,8 @@ export class CartDao {
       
       };
 
-    static saveCart = async (cart) => {
-        try {
+    async saveCart(cart) {
+        try{
           await cart.save();
         } catch (error) {
           throw new Error('Error saving cart');

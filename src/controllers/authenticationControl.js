@@ -1,11 +1,11 @@
-import { UserDAO } from '../dao/userDao.js'
+import { usersDao } from '../dao/indexDao.js'
 import { encriptar } from '../utils/cryptografia.js'
 
 const COOKIE_OPTS = { signed: true, maxAge: 1000 * 60 * 60, httpOnly: true }
 
 export async function registerUser(req, _username, _password, done) {
     try {
-      const user = await UserDAO.createUser(req.body)
+      const user = await usersDao.createUser(req.body)
       done(null, user)
     } catch (error) {
       done(error)
@@ -15,7 +15,7 @@ export async function registerUser(req, _username, _password, done) {
 
 export async function loginUser(username, password, done){
     try {
-      const user = await UserDAO.findUserByUsername({ username, password })
+      const user = await usersDao.findUserByUsername({ username, password })
       done(null, user)
     } catch (error) {
       done(error)

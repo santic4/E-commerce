@@ -1,4 +1,4 @@
-import { ProductDao } from "../dao/productDao.js";
+import { productDao } from "../dao/indexDao.js";
 import { ProductService } from "../services/productServices.js";
 
 export const getAllProducts = async (req, res, next) => {
@@ -12,7 +12,7 @@ export const getAllProducts = async (req, res, next) => {
     
         const filter = req.query.filtro ? { category: req.query.filtro } : {}; // Cambié el nombre según el frontend
     
-        const paginado = await ProductDao.paginate(filter, options);
+        const paginado = await productDao.paginate(filter, options);
     
         const results = {
           status: 'success',
@@ -35,7 +35,7 @@ export const getAllProducts = async (req, res, next) => {
 
 export const getCategory = async (req, res, next) => {
     try{
-     const categoryProducts = await ProductDao.getCategory();
+     const categoryProducts = await productDao.getCategory();
  
      res.json (categoryProducts)
  
@@ -48,7 +48,7 @@ export const getCategory = async (req, res, next) => {
 
 export const getProductId = async (req, res, next) => {
     try{
-        const IdProduct = await ProductDao.getProductId();
+        const IdProduct = await productDao.getProductId();
 
         res.json(IdProduct)
         
@@ -76,7 +76,7 @@ export const postProduct = async (req, res, next) => {
 
 export const updateProduct = async (req, res, next) => {
     try{
-        const updProduct = await ProductDao.updateProduct(req.params.pid, req.body)
+        const updProduct = await productDao.updateProduct(req.params.pid, req.body)
     
         res.json(updProduct)
 
@@ -88,7 +88,7 @@ export const updateProduct = async (req, res, next) => {
 
 export const deleteProduct = async (req, res, next) => {
     try{
-        const idProduct = await ProductDao.deleteProduct(req.params.pid)
+        const idProduct = await productDao.deleteProduct(req.params.pid)
         
         res.json(idProduct)
 

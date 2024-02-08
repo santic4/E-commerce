@@ -1,10 +1,10 @@
-import { CartDao } from "../dao/cartDao.js";
-import { CartService } from "../services/cartServices.js";
+import { cartDao } from "../dao/indexDao.js";
+import { cartService } from "../services/cartServices.js";
 
 // Obtener todos los carritos
 export const getAllCarts = async (req, res, next) => {
     try{
-        const carritos = await CartDao.getAllCarts();
+        const carritos = await cartDao.getAllCarts();
         
         res.json(carritos);
 
@@ -17,7 +17,7 @@ export const getAllCarts = async (req, res, next) => {
 // Obtener un carrito por ID
 export const getCartId = async (req, res, next) => {
     try {
-        const carritoPorId = await CartDao.getCartId(req.params.cid);
+        const carritoPorId = await cartDao.getCartId(req.params.cid);
         
         res.json(carritoPorId);
 
@@ -30,7 +30,7 @@ export const getCartId = async (req, res, next) => {
 // Crear un nuevo carrito
 export const postCart = async (req, res, next) => {
     try {
-        const newCarrito = await CartDao.postCart(req.body);
+        const newCarrito = await cartDao.postCart(req.body);
         
         res.status(201).json(newCarrito);
 
@@ -49,7 +49,7 @@ export const updateQuantityProductInCart = async (req, res, next) => {
         const cantidadNumerica = parseInt(nuevaCantidad);
        
         // Llamar al servicio para actualizar la cantidad
-        const productoActualizado = await CartService.updateQuantityProductInCart(cid, pid, cantidadNumerica);
+        const productoActualizado = await cartService.updateQuantityProductInCart(cid, pid, cantidadNumerica);
        
         res.status(201).json({ message: 'Producto Actualizado en el Carrito', info: productoActualizado });
     
@@ -62,7 +62,7 @@ export const updateQuantityProductInCart = async (req, res, next) => {
 // Añadir un producto al carrito o incrementar la cantidad si ya existe
 export const postProductIntoCart = async (req, res, next) => {
     try {
-        const producto = await CartDao.postProductIntoCart(req.params.cid, req.params.pid);
+        const producto = await cartDao.postProductIntoCart(req.params.cid, req.params.pid);
         res.status(201).json({ message: 'Producto Agregado', info: producto });
     } catch (error) {
         next(error)
@@ -73,7 +73,7 @@ export const postProductIntoCart = async (req, res, next) => {
 // Eliminar un carrito por ID
 export const deleteCart = async (req, res, next) => {
     try {
-        const delCarrito = await CartDao.deleteCart(req.params.cid);
+        const delCarrito = await cartDao.deleteCart(req.params.cid);
         
         res.status(201).json({ message: 'Carrito Eliminado', info: delCarrito });
 
@@ -85,7 +85,7 @@ export const deleteCart = async (req, res, next) => {
 
 export const deleteProdInCart = async (req, res, next) => {
     try {
-        const delProdInCarrito = await CartDao.deleteProdInCart(req.params.cid, req.params.pid);
+        const delProdInCarrito = await cartDao.deleteProdInCart(req.params.cid, req.params.pid);
         
         res.status(201).json({ message: 'Producto Eliminado del carrito', info: delProdInCarrito });
         
@@ -98,9 +98,10 @@ export const deleteProdInCart = async (req, res, next) => {
 // Comprar
 export const purchaseCart = async (req, res, next) => {
     try {
+      console.log('purchaseCART' + req.params.cid)
       const cartId = req.params.cid; 
      
-      const result = await CartService.purchaseCart(cartId);
+      const result = await cartService.purchaseCart(cartId);
       res.status(200).json(result);
     } catch (error) {
       console.error(error);

@@ -3,7 +3,7 @@ import { Product } from "../models/productsSchema.js";
 export class ProductDao {
 
     // Obtiene todos los productos paginados
-    static paginate =  async (filtro, opciones) => {
+    async paginate(filtro, opciones) {
         try {
             const paginado= await Product.paginate(filtro, opciones);
             return paginado   
@@ -13,7 +13,7 @@ export class ProductDao {
     };
 
     // Obtiene productos por categoria
-    static getCategory = async () => {
+    async getCategory() {
         try {
             const categoriasProductos = await Product.aggregate([
                 { $group: { _id: "$category" } }
@@ -25,7 +25,7 @@ export class ProductDao {
         }
     };
 
-    static getProductId = async (idp) => {
+    async getProductId(idp) {
         try {
             const productoPorId = await Product.findById(idp);
 
@@ -39,7 +39,7 @@ export class ProductDao {
         }
     };
 
-    static postProduct = async (nuevoProductoData) => {
+    async postProduct(nuevoProductoData) {
         try {
             const nuevoProducto = await Product.create(nuevoProductoData);
             return nuevoProducto;
@@ -48,7 +48,7 @@ export class ProductDao {
         }
     };
 
-    static updateProduct = async (productoId, newData) => {
+    async updateProduct(productoId, newData) {
         try {
             if (newData.code) {
                 throw new Error('No se puede modificar el código del producto');
@@ -69,7 +69,8 @@ export class ProductDao {
             throw new Error(`Error al actualizar el producto por ID: ${error.message}`);
         }
     };
-    static deleteProduct = async (productoId) => {
+
+    async deleteProduct(productoId) {
         try {
             const delProducto = await Product.findByIdAndDelete(productoId);
 

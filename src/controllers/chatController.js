@@ -1,4 +1,4 @@
-import { ChatDao } from "../dao/chatDao.js";
+import { chatDao } from "../dao/indexDao.js";
 
 
 export const chatController = async (req, res) => { 
@@ -6,7 +6,7 @@ export const chatController = async (req, res) => {
       try {       
         // Lógica para enviar un mensaje al chat
         const messageData = req.body;
-        const savedMessage = await ChatDao.saveMessage(messageData);
+        const savedMessage = await chatDao.saveMessage(messageData);
         res.json(savedMessage);
       } catch (error) {
         console.error(error);
