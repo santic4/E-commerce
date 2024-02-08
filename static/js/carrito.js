@@ -140,17 +140,12 @@ async function buy() {
   
       if (data) {
   
-        alert({
-          title: 'Compra exitosa!',
-          text: `ID del ticket: +${data.ticket.code}`,
-          icon: 'success',
-          confirmButtonText: 'Aceptar',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = './productos'
-          }
-        });
+        alert('Compra exitosa, revisa el mail')
+
+        window.location.href = './productos';
+
         localStorage.removeItem('carrito');
+
       } else {
         const errorMessage = data.failedProducts ? 'Productos no disponibles: ' + data.failedProducts.join(', ') : 'Error desconocido en la compra';
         alert('Error en la compra. ' + errorMessage);
