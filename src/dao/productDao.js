@@ -1,4 +1,4 @@
-import { Product } from "../models/productsSchema.js";
+import { Product } from "../models/mongoose/productsSchema.js";
 
 export class ProductDao {
 

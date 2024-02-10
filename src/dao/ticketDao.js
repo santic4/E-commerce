@@ -1,4 +1,4 @@
-import { Ticket } from '../models/ticketSchema.js'
+import { Ticket } from '../models/mongoose/ticketSchema.js'
 
 export class TicketDao{
 

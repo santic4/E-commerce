@@ -9,7 +9,7 @@ const schema = new Schema({
   email: { type: String, unique: true, required: true },
   age: { type: String, required: true },
   password: { type: String, required: true },
-  cart: { type: String, unique: true, required: true },
+  cart: { type: String, unique: true, defaul: '' },
   rol: { type: String, default: 'user' },
   orders: {
     type: [

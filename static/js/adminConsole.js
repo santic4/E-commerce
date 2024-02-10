@@ -8,6 +8,7 @@ document.getElementById('productForm').addEventListener('submit', function(event
     })
     .then(response => {
         if (!response.ok) {
+            alert('Debes ser Admin para realizar esta accion')
             throw new Error('Hubo un problema al crear el producto.');
         }
         return response.json();

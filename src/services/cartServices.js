@@ -1,6 +1,7 @@
 import { cartDao } from "../dao/indexDao.js";
 import { productDao } from "../dao/indexDao.js";
 import { usersDao } from "../dao/indexDao.js";
+import { CartError } from "../models/errors/cartError.js";
 import { emailService } from "./email/emailServiceGmail.js";
 import { TicketService } from "./ticketServices.js"
 import { v4 as uuidv4 } from 'uuid';
@@ -25,7 +26,8 @@ class CartService {
             return await cartDao.updateQuantityProductInCart(cid, pid, cantidadNumerica);
 
         }catch(err){
-            throw new Error(`Error en el servicio de carritos: ${err.message}`);
+            throw new CartError()
+            // throw new Error(`Error en el servicio de carritos: ${err.message}`);
         }
     } 
 
@@ -53,11 +55,12 @@ class CartService {
       );
  
       return { ticket, failedProductIds };
-    } catch(err) {
-      console.error(`Error en el servicio de carritos al realizar la compra: ${err.message}`);
-      throw new Error('Error al realizar la compra del carrito.');
-    }
+    } catch(error) {
+      throw new CartError();
+      // console.error(`Error en el servicio de carritos al realizar la compra: ${err.message}`);
+      // throw new Error('Error al realizar la compra del carrito.');
   }
+}
  
 async createTicket(cart, userEmail) {
     const ticketData = {
@@ -104,8 +107,9 @@ async updateProductStock(productId, quantity, failedProductIds) {
         return false;
       }
     } catch (error) {
-      console.error(`Error en el servicio de carritos al actualizar el stock del producto: ${error.message}`);
-      throw new Error('Error al actualizar el stock del producto.');
+      throw new CartError()
+      //console.error(`Error en el servicio de carritos al actualizar el stock del producto: ${error.message}`);
+      //throw new Error('Error al actualizar el stock del producto.');
     }
    }
  
@@ -118,8 +122,9 @@ async updateCartAfterPurchase(cart, failedProductIds) {
       cart.carrito = failedProducts;
       await cartDao.saveCart(cart);
     } catch (error) {
-      console.error(`Error en el servicio de carritos al actualizar el carrito después de la compra: ${error.message}`);
-      throw new Error('Error al actualizar el carrito después de la compra.');
+      throw new CartError()
+      //console.error(`Error en el servicio de carritos al actualizar el carrito después de la compra: ${error.message}`);
+      //throw new Error('Error al actualizar el carrito después de la compra.');
     }
   }
 

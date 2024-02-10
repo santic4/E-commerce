@@ -1,4 +1,4 @@
-import { Carrito } from "../models/carritoSchema.js";
+import { Carrito } from "../models/mongoose/carritoSchema.js";
 
 export class CartDao {
 

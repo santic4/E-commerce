@@ -1,6 +1,9 @@
 const rutaFetch = 'http://localhost:8080/api/carrito/carritoOn';
 const rutaFetchNewCarrito = 'http://localhost:8080/api/carrito';
 
+const targetDOM = document.getElementById('listaCarritos');
+targetDOM.addEventListener('click', selectCarrito);
+
 document.getElementById('newCarrito').addEventListener('click', newCarrito);
 
 function loadCarritos() {
@@ -13,8 +16,7 @@ function loadCarritos() {
             return resp.json();
         })
         .then(data => {
-            const targetDOM = document.getElementById('listaCarritos');
-            targetDOM.addEventListener('click', selectCarrito);
+            
             targetDOM.innerHTML = '';
 
             if (data.length > 0) {
@@ -79,6 +81,9 @@ async function newCarrito(e) {
         },
         body: JSON.stringify({ user: user }),
       });
+
+      const targetDOM = document.getElementById('listaCarritos');
+      targetDOM.addEventListener('click', selectCarrito);
   
       if (response.ok) {
         // El mensaje se ha enviado correctamente
@@ -87,7 +92,7 @@ async function newCarrito(e) {
         const newID = response._id
         console.log(newID)
         localStorage.setItem('carrito', JSON.stringify(newID))
-        window.location = '/productos'
+        window.location = '/'
   
       } else {
         console.error('Error al enviar el mensaje:', response.status)

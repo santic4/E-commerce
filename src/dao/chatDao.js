@@ -1,4 +1,4 @@
-import { Chat } from '../models/chatSchema.js'
+import { Chat } from '../models/mongoose/chatSchema.js'
 
 export class ChatDao {
   async saveMessage(messageData) {
