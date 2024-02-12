@@ -28,14 +28,16 @@ usuariosRouter.get('/profile', (req, res) => {
   })
 })
 
-/*
-
 // Resetear Contraseña
-usuariosRouter.get('/resetpassword', function resetPasswordView(req, res) {
+usuariosRouter.get('/resetpassword', (req, res) => {
   res.render('resetpassword.handlebars', {
-    title: 'Reestablecer contraseña'
+    pageTitle: 'Reestablecer contraseña'
   });
 });
+
+/*
+
+
 
 
 

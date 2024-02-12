@@ -54,3 +54,13 @@ export const getAllUsers = async (req, res, next) => {
     next(error);
   }
 };
+
+export const resetPassword = async (req, res, next) => {
+  try {
+      const actualizado = await usersDao.resetPass(req.body.email, req.body.password)
+      res['successfullPut'](actualizado)
+    } catch (error) {
+      next(error)
+    }
+
+}

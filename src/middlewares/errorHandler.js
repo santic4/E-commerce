@@ -1,21 +1,24 @@
-import { errorsTypes } from "../models/errors/errorsTypes.js"
+import { errorsTypes } from "../models/errors/errorsTypes.js";
 
 export function errorHandler(error, req, res, next) {
- 
-    if(error.type == errorsTypes.AUTH_ERROR) { // A cada tipo de error le agrego el estado que corresponda
-        res.status(401)
-    }else{
-        res.status(500)
-    }
-    res.json({ status: 'error', message: error.message })
-
-  res.json({
+  let statusCode = 500; // Por defecto, establece el código de estado a 500 para otros tipos de errores
+  
+  if (error.type === errorsTypes.AUTH_ERROR) { 
+    statusCode = 401;
+  } else if (error.type === errorsTypes.CART_ERROR) {
+    statusCode = 404;
+  } else if (error.message === 'not found') {
+    statusCode = 404; 
+  }
+  
+  res.status(statusCode).json({
     status: 'error',
     message: error.message,
-  })
+  });
 }
 
 /*
+export function errorHandler(error, req, res, next) {
   if (error.message === 'not found') {
     res.status(404)
   } else if (error.message === 'not found') {
@@ -24,4 +27,11 @@ export function errorHandler(error, req, res, next) {
     res.status(500)
   }
   console.log(error)
+
+  res.json({
+    status: 'error',
+    message: error.message,
+  })
+}
+
 */

@@ -1,8 +1,9 @@
 import { Router } from 'express'
 
-import { registerUser, getCurrentUser, getAllUsers } from '../../controllers/userControllers.js'
+import { registerUser, getCurrentUser, getAllUsers, resetPassword, generateUsersHandler } from '../../controllers/userControllers.js'
 
 import { passportLocalRegister, passportAuth } from '../../middlewares/passport.js'
+
 
 
 export const usersRouter = Router()
@@ -20,3 +21,7 @@ usersRouter.get('/current',
 
 // Admins
 usersRouter.get('/', getAllUsers)
+
+usersRouter.put('/', resetPassword)
+
+usersRouter.post('/mockingproducts', generateUsersHandler);

@@ -1,5 +1,7 @@
 import { usersManager } from "../models/index.js";
 import { hashear, hasheadasSonIguales } from "../utils/cryptografia.js";
+import { usersServices } from '../services/usersServices.js'
+import { AuthenticationError } from '../models/errors/authenticationErrors.js'
 
 export class UserDao {
 
@@ -21,17 +23,12 @@ export class UserDao {
     
       async findUserByUsername({username, password}) {
         try {
-            const user = await usersManager.findOne({ username })
-            if (!user) { throw new Error('authentication error') }
-            if (!hasheadasSonIguales({
-              recibida: password,
-              almacenada: user.password
-            })) {
-              throw new Error('authentication error')
-            }
-            return user.toObject() 
+          const user = await usersServices.findUserByUsername({username, password})
+           
+          return user.toObject() 
+
         } catch (error) {
-          throw new Error('Error finding user by username');
+          throw new AuthenticationError()
         }
       };
     
@@ -39,8 +36,19 @@ export class UserDao {
         try {
           return await usersManager.find({}, { password: 0 }).lean();
         } catch (error) {
-          throw new Error('Error finding user by username');
+          throw new AuthenticationError()
         }
       };
+
+      async resetPass(email, pass) {
+        try{
+          const userUpd = await usersServices.resetPass(email, pass)
+
+          return userUpd
+        }catch(error){
+          throw new AuthenticationError()
+        }
+
+      }
 
 }

@@ -11,7 +11,7 @@ export class ChatDao {
   
         return savedMessage;
       } catch (error) {
-        throw error;
+        throw new Error('Error al enviar el mensaje. Intente de nuevo.');
       }
   }
 
