@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { registerUser, getCurrentUser, getAllUsers, resetPassword, generateUsersHandler } from '../../controllers/userControllers.js'
+import { registerUser, getCurrentUser, getAllUsers, resetPassword } from '../../controllers/userControllers.js'
 
 import { passportLocalRegister, passportAuth } from '../../middlewares/passport.js'
 
@@ -24,4 +24,3 @@ usersRouter.get('/', getAllUsers)
 
 usersRouter.put('/', resetPassword)
 
-usersRouter.post('/mockingproducts', generateUsersHandler);

@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { getAllProducts, getCategory, getProductId, postProduct, updateProduct, deleteProduct } from '../../controllers/productsController.js';
 import { passportAuth } from '../../middlewares/passport.js';
 import { adminsOnly } from '../../middlewares/authorization.js';
+import { generateUsersHandler } from '../../controllers/mockingController.js';
 
 export const productsRouter = Router()
                    
@@ -35,3 +36,5 @@ productsRouter.delete('/:pid',
     adminsOnly,
     deleteProduct
 )
+
+productsRouter.post('/mockingproducts', generateUsersHandler);
