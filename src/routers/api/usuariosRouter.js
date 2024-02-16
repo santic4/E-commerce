@@ -3,6 +3,7 @@ import { Router } from 'express'
 import { registerUser, getCurrentUser, getAllUsers, resetPassword } from '../../controllers/userControllers.js'
 
 import { passportLocalRegister, passportAuth } from '../../middlewares/passport.js'
+import { logger } from '../../utils/logger.js'
 
 
 

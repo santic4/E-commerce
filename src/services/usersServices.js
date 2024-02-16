@@ -6,7 +6,6 @@ class UsersServices {
     async findUserByUsername( {username, password}) {
         try {
             const user = await usersManager.findOne({ username })
-            console.log('user', user)
             if (!user) { throw new AuthenticationError() }
             if (!hasheadasSonIguales({
               recibida: password,

@@ -1,7 +1,8 @@
 import { usersManager } from "../models/index.js";
-import { hashear, hasheadasSonIguales } from "../utils/cryptografia.js";
+import { hashear } from "../utils/cryptografia.js";
 import { usersServices } from '../services/usersServices.js'
 import { AuthenticationError } from '../models/errors/authenticationErrors.js'
+
 
 export class UserDao {
 
@@ -24,7 +25,7 @@ export class UserDao {
       async findUserByUsername({username, password}) {
         try {
           const user = await usersServices.findUserByUsername({username, password})
-           
+
           return user.toObject() 
 
         } catch (error) {

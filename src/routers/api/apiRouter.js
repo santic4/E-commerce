@@ -3,7 +3,7 @@ import { productsRouter } from './productsRouter.js'
 import { carritoRouter } from "./carritoRouter.js"
 import { sessionsRouter } from './sessionesRouter.js'
 import { usersRouter } from './usuariosRouter.js'
-import { errorHandler } from '../../middlewares/errorHandler.js'
+import { errorHandler, errorHandlerLogger } from '../../middlewares/errorHandler.js'
 import { metodosPersonalizados} from "../../middlewares/respuestasMejoradas.js"
 import { chatRouter } from './chatRouter.js'
 
@@ -23,3 +23,4 @@ apiRouter.use('/chat', chatRouter)
 // middleware de error para todos los errores de la api rest!
 // acá llegan todos los errores lanzados desde los next() !
 apiRouter.use(errorHandler)
+apiRouter.use(errorHandlerLogger)
